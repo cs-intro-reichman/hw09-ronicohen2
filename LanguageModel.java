@@ -36,40 +36,27 @@ public class LanguageModel {
 
     /** Builds a language model from the text in the given file (the corpus). */
 	public void train(String fileName) {
-		BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(fileName));
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
+        String window = "";
+        char chr;
+        In in = new In(fileName);
+        while (!in.isEmpty()) 
+        {
+            chr  = in.readChar();
+            window += chr;
+            if (window.length() < windowLength) 
+            {
+                window = window.substring(1);
             }
-            String corpus = sb.toString();
-            int corpusLength = corpus.length();
-            for (int i = 0; i < corpusLength - windowLength; i++) {
-                String window = corpus.substring(i, i + windowLength);
-                char nextChar = corpus.charAt(i + windowLength);
-                List charDataList = CharDataMap.getOrDefault(window, new List());
-                int index = charDataList.indexOf(nextChar);
-                if (index == -1) {
-                    charDataList.addFirst(nextChar);
-                } else {
-                    CharData charData = charDataList.get(index);
-                    charData.count++;
-                }
-                CharDataMap.put(window, charDataList);
+            List probs = CharDataMap.get(window);
+            if (probs == null) 
+            {
+                probs = new List();
+                CharDataMap.put(window, probs);
             }
-        } catch (IOException e) {
-        e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+            probs.update(chr);
+             }
+        for (List probs : CharDataMap.values())
+            calculateProbabilities(probs);
 	}
 
     // Computes and sets the probabilities (p and cp fields) of all the
