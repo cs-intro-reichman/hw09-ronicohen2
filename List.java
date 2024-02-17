@@ -33,17 +33,18 @@ public class List {
         newNode.next = first;
         first = newNode;
         size++;
-    }
+     }
     
     /** GIVE Textual representation of this list. */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        if (size == 0) return "()";
+        String str = "(";
         Node current = first;
         while (current != null) {
-            sb.append(current.cp.toString()).append("\n");
+            str += current.cp.toString() + " ";
             current = current.next;
         }
-        return sb.toString();
+        return str.substring(0, str.length() - 1) + ")";
     }
 
     /** Returns the index of the first CharData object in this list
@@ -66,7 +67,16 @@ public class List {
      *  increments its counter. Otherwise, adds a new CharData object with the
      *  given chr to the beginning of this list. */
     public void update(char chr) {
-        // Your code goes here
+        Node current = first;
+        while (current != null) {
+            if (current.cp.chr == chr) {
+                // If the character exists, increment its counter and return
+                current.cp.count++;
+                return;
+            }
+            current = current.next;
+        }
+        addFirst(chr);
     }
 
     /** GIVE If the given character exists in one of the CharData objects
