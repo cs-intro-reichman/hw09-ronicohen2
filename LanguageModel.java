@@ -36,7 +36,9 @@ public class LanguageModel {
 
     /** Builds a language model from the text in the given file (the corpus). */
 	public void train(String fileName) {
-		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+		BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(fileName));
             String line;
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
@@ -58,7 +60,15 @@ public class LanguageModel {
                 CharDataMap.put(window, charDataList);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+        e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 	}
 
