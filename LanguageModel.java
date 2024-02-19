@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Random;
 
@@ -110,21 +108,30 @@ public class LanguageModel {
 	 * @return the generated text
 	 */
 	public String generate(String initialText, int textLength) {
-        if (initialText.length() < windowLength) {
+        String window = "";
+        String text = initialText;
+        char c;
+        if (windowLength > initialText.length() || initialText.length() >= textLength)
+        {
             return initialText;
         }
-        StringBuilder generatedText = new StringBuilder(initialText);
-        String window = initialText.substring(initialText.length() - windowLength);
-        while (generatedText.length() < textLength) {
-            List charDataList = CharDataMap.get(window);
-            if (charDataList == null) {
-                break;
+        else {
+            window = initialText.substring(initialText.length() - windowLength);
+            while (text.length() - windowLength < textLength) 
+            {
+                if (CharDataMap.containsKey(window))
+                {
+                    c = getRandomChar(CharDataMap.get(window));
+                    text += c;
+                    window = window.substring(1) + c;
+                }
+                else
+                {
+                    return text;
+                }
             }
-            char nextChar = getRandomChar(charDataList);
-            generatedText.append(nextChar);
-            window = generatedText.substring(generatedText.length() - windowLength);
-            }
-        return generatedText.toString();      
+        return text;
+        }
 	}
 
     /** Returns a string representing the map of this language model. */
@@ -138,18 +145,6 @@ public class LanguageModel {
 	}
 
     public static void main(String[] args) {
-        //int windowLength = Integer.parseInt(args[0]);
-        //String initialText = args[1];
-       // int generatedTextLength = Integer.parseInt(args[2]);
-       // Boolean randomGeneration = args[3].equals("random");
-       // String fileName = args[4];
-       // Create the LanguageModel object
-     //  LanguageModel lm;
-      // if (randomGeneration)
-         //  lm = new LanguageModel(windowLength);
-     //  else
-       //    lm = new LanguageModel(windowLength, 20);
-       //lm.train(fileName);
-      // System.out.println(lm.generate(initialText, generatedTextLength));
+
  }
 }
