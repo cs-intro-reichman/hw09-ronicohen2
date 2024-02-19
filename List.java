@@ -95,7 +95,7 @@ public class List {
         int ncounter = 1;
         while (current != null) {
             if (current.cp.equals(chr)) {
-                if (ncounter != 1)
+                if (ncounter == 1)
                 {
                     first = first.next;
                     return true;
