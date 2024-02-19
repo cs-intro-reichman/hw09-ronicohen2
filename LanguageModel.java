@@ -57,11 +57,9 @@ public class LanguageModel {
                 CharDataMap.put(window, probs);
             }
             window = window.substring(1) + chr;
-            
+        }   
         for (List probs : CharDataMap.values())
             calculateProbabilities(probs);
-
-        }
 
 	}
 
