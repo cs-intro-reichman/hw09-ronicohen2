@@ -8,7 +8,7 @@ public class CharData {
 
 	// a counter
 	int count; 
-
+	
 	// a probability (number between 0 and 1)
 	double p;    
 
