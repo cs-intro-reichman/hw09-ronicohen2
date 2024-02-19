@@ -37,7 +37,7 @@ public class LanguageModel {
         String window = "";
         char chr;
         In in = new In(fileName);
-        for (int i = 0; i < windowLength && in.hasNextChar() ; i++)
+        for (int i = 0; i < windowLength; i++)
         {
             chr = in.readChar();
             window += chr;
